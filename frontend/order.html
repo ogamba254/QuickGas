@@ -171,7 +171,6 @@
 
   <script>
     // 1. INITIALIZE EMAILJS
-    // Replace "YOUR_PUBLIC_KEY" with the Public Key from your EmailJS Account settings
     (function() {
         emailjs.init("I2UHj5_9SB7Mgdy0I");
     })();
@@ -195,14 +194,10 @@
       const submitBtn = document.getElementById('submitBtn');
       submitBtn.innerText = "Processing Order...";
       submitBtn.disabled = true;
-
-      // 2. SEND EMAIL TO SHOP & CUSTOMER
-      // Template Variables in EmailJS should match the "name" attributes in your HTML
-      // (e.g., {{name}}, {{phone}}, {{gasBrand}}, {{address}}, etc.)
       
-      const serviceID = 'service_rcxeoog'; // e.g., 'service_gmail'
-      const shopTemplateID = 'template_ttumqrc'; // Template for Ogambadedalius@gmail.com
-      const customerTemplateID = 'template_7unxekb'; // Template for the customer
+      const serviceID = 'service_rcxeoog'; 
+      const shopTemplateID = 'template_ttumqrc'; 
+      const customerTemplateID = 'template_7unxekb'; 
 
       // Send to Shop
       emailjs.sendForm(serviceID, shopTemplateID, this)
@@ -211,8 +206,13 @@
           return emailjs.sendForm(serviceID, customerTemplateID, this);
         })
         .then(() => {
-          alert("Success! Order sent to QuickGas. A confirmation has been sent to your email.");
-          window.location.href = "thank-you.html"; // Optional redirect
+          // Tell the homepage to show a success message after redirecting
+          sessionStorage.setItem('orderSuccess', 'true');
+          
+          alert("Success! Your order has been placed. Redirecting home...");
+          
+          // Automatic Redirect to Home
+          window.location.href = "index.html";
         })
         .catch((err) => {
           alert("Oops! Something went wrong. Please try again.");
