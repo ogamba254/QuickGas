@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Services | QuickGas</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      background-color: #f4f7f6;
+      color: #333;
+    }
+
+    /* Navigation */
+    .navbar {
+      background-color: #ffffff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 5%;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .nav-logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #2c3e50;
+      text-decoration: none;
+    }
+
+    /* Page Header */
+    .services-header {
+      text-align: center;
+      padding: 60px 20px;
+      background-color: white;
+      border-bottom: 1px solid #eee;
+    }
+
+    .services-header h1 {
+      color: #2c3e50;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .services-header p {
+      color: #7f8c8d;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Services Grid */
+    .services-container {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .service-card {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      text-align: center;
+      transition: all 0.3s ease;
+      border-bottom: 4px solid transparent;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+
+    .service-card:hover {
+      transform: translateY(-10px);
+      border-bottom: 4px solid #e67e22;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+    }
+
+    .icon-box {
+      width: 70px;
+      height: 70px;
+      background: rgba(230, 126, 34, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 2rem;
+    }
+
+    .service-card h3 {
+      color: #2c3e50;
+      margin-bottom: 15px;
+    }
+
+    .service-card p {
+      color: #636e72;
+      font-size: 0.95rem;
+    }
+
+    /* Footer CTA */
+    .cta-banner {
+      background-color: #2c3e50;
+      color: white;
+      text-align: center;
+      padding: 50px 20px;
+      margin-top: 60px;
+    }
+
+    .btn-white {
+      display: inline-block;
+      margin-top: 20px;
+      background: white;
+      color: #2c3e50;
+      padding: 12px 30px;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 6px;
+      transition: 0.3s;
+    }
+
+    .btn-white:hover {
+      background: #e67e22;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">🔥 QuickGas</a>
+  </nav>
+
+  <header class="services-header">
+    <h1>Our Services</h1>
+    <p>Comprehensive energy solutions for your home and business, delivered with speed and safety in mind.</p>
+  </header>
+
+  <main class="services-container">
+    <div class="service-card">
+      <div class="icon-box">🚚</div>
+      <h3>Gas Delivery</h3>
+      <p>Order from any major brand and have it delivered to your kitchen in under 45 minutes. We handle the heavy lifting.</p>
+    </div>
+
+    <div class="service-card">
+      <div class="icon-box">🔄</div>
+      <h3>Cylinder Refilling</h3>
+      <p>Standardized refilling services for all sizes (6kg, 13kg, 22kg, 45kg). We ensure accurate weight and safety seals.</p>
+    </div>
+
+    <div class="service-card">
+      <div class="icon-box">🚨</div>
+      <h3>Emergency Supply</h3>
+      <p>Ran out of gas in the middle of a meal? Our priority dispatch ensures you get a replacement tank ASAP, 24/7.</p>
+    </div>
+  </main>
+
+  <section class="cta-banner">
+    <h2>Need gas right now?</h2>
+    <p>Join thousands of happy customers who never worry about an empty tank.</p>
+    <a href="products.html" class="btn-white">View Pricing & Order</a>
+  </section>
+
+</body>
+</html>

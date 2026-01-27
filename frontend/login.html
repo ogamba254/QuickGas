@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | QuickGas</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                  url('https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=2000');
+      background-attachment: fixed;
+      background-size: cover;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .login-card {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      text-align: center;
+      width: 100%;
+      max-width: 400px;
+      box-sizing: border-box;
+      backdrop-filter: blur(10px);
+    }
+
+    .login-card h2 {
+      color: #2c3e50;
+      margin-bottom: 8px;
+      font-size: 1.8rem;
+    }
+
+    .login-card p {
+      color: #7f8c8d;
+      margin-bottom: 25px;
+      font-size: 0.9rem;
+    }
+
+    .login-form {
+      text-align: left;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 5px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    .btn-login {
+      width: 100%;
+      background-color: #e67e22;
+      color: white;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 20px 0;
+      color: #95a5a6;
+      font-size: 0.85rem;
+    }
+
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid #eee;
+    }
+
+    .divider:not(:empty)::before { margin-right: .5em; }
+    .divider:not(:empty)::after { margin-left: .5em; }
+
+    .google-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background-color: #ffffff;
+      color: #5f6368;
+      border: 1px solid #dadce0;
+      padding: 12px 20px; 
+      width: 100%;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 0.9rem; 
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .google-btn:hover { background-color: #f8f9fa; }
+
+    .google-icon {
+      width: 20px; 
+      height: 20px;
+    }
+
+    .footer-text {
+      margin-top: 25px;
+      font-size: 0.85rem;
+      color: #95a5a6;
+    }
+
+    .footer-text a {
+      color: #e67e22;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-card">
+    <h2>Welcome Back</h2>
+    <p>Sign in to your QuickGas account</p>
+
+    <form class="login-form" onsubmit="event.preventDefault(); alert('Please use Google Sign-in for now!');">
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" placeholder="Enter your email" required>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" placeholder="Enter your password" required>
+      </div>
+      <button type="submit" class="btn-login">Log In</button>
+    </form>
+
+    <div class="divider">or</div>
+
+    <button id="google-login-btn" class="google-btn">
+      <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_Logo.svg" alt="Google">
+      <span>Sign in with Google</span>
+    </button>
+
+    <div class="footer-text">
+      Don't have an account? <a href="register.html">Sign Up</a>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCsWWrq722NErnhLdPuTMTAE843cz7hedA",
+      authDomain: "quickgas-3ce4f.firebaseapp.com",
+      projectId: "quickgas-3ce4f",
+      storageBucket: "quickgas-3ce4f.firebasestorage.app",
+      messagingSenderId: "808986496518",
+      appId: "1:808986496518:web:51a0c11d36f42248377d87"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    // Handle Manual Click
+    const googleBtn = document.getElementById('google-login-btn');
+    googleBtn.addEventListener('click', () => {
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          console.log("Success:", result.user);
+          window.location.assign("index.html"); // Redirect to index
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("Login failed! Ensure Google is enabled in Firebase.");
+        });
+    });
+
+    // Handle Automatic Redirect for already signed-in users
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("Authenticated user found:", user.displayName);
+        window.location.assign("index.html"); // Automatic redirect
+      }
+    });
+  </script>
+
+</body>
+</html>

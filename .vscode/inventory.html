@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory | QuickGas Admin</title>
+  <style>
+    :root {
+      --primary: #2c3e50;
+      --accent: #e67e22;
+      --bg: #f4f7f6;
+      --white: #ffffff;
+      --success: #27ae60;
+      --danger: #e74c3c;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      display: flex;
+      background-color: var(--bg);
+    }
+
+    /* --- SIDEBAR (Consistent with Admin) --- */
+    .sidebar {
+      width: 240px;
+      height: 100vh;
+      background: var(--primary);
+      color: white;
+      position: fixed;
+      padding: 20px;
+    }
+
+    .sidebar h1 { font-size: 1.5rem; color: var(--accent); margin-bottom: 30px; }
+    
+    .nav-item {
+      padding: 12px;
+      display: block;
+      color: #bdc3c7;
+      text-decoration: none;
+      border-radius: 8px;
+      margin-bottom: 5px;
+    }
+
+    .nav-item:hover, .nav-item.active {
+      background: rgba(255,255,255,0.1);
+      color: white;
+    }
+
+    /* --- MAIN CONTENT --- */
+    .main-content {
+      margin-left: 280px;
+      padding: 40px;
+      width: calc(100% - 280px);
+    }
+
+    .header-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .btn-add {
+      background: var(--accent);
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    /* --- INVENTORY TABLE --- */
+    .inventory-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th { text-align: left; padding: 15px; border-bottom: 2px solid var(--bg); color: #7f8c8d; }
+    td { padding: 15px; border-bottom: 1px solid var(--bg); }
+
+    .stock-badge {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    .stock-high { background: #e8f5e9; color: #2e7d32; }
+    .stock-low { background: #ffebee; color: #c62828; }
+
+    .price-input {
+      width: 80px;
+      padding: 5px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    .save-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <h1>QuickGas Admin</h1>
+    <nav>
+      <a href="admin.html" class="nav-item">Dashboard</a>
+      <a href="active-orders.html" class="nav-item">Active Orders</a>
+      <a href="inventory.html" class="nav-item active">Inventory</a>
+      <a href="#" class="nav-item">Customer List</a>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <div class="header-actions">
+      <h2>Stock & Pricing</h2>
+      <button class="btn-add">+ Add New Brand</button>
+    </div>
+
+    <div class="inventory-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Brand</th>
+            <th>Size</th>
+            <th>Current Stock</th>
+            <th>Status</th>
+            <th>Price (KES)</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="inventoryBody">
+          <tr>
+            <td><strong>Total Energies</strong></td>
+            <td>6kg</td>
+            <td>45 Units</td>
+            <td><span class="stock-badge stock-high">In Stock</span></td>
+            <td><input type="text" class="price-input" value="1,250"></td>
+            <td><button class="save-btn">Update</button></td>
+          </tr>
+          <tr>
+            <td><strong>Pro Gas</strong></td>
+            <td>13kg</td>
+            <td>3 Units</td>
+            <td><span class="stock-badge stock-low">Low Stock</span></td>
+            <td><input type="text" class="price-input" value="2,800"></td>
+            <td><button class="save-btn">Update</button></td>
+          </tr>
+          <tr>
+            <td><strong>K-Gas</strong></td>
+            <td>6kg</td>
+            <td>12 Units</td>
+            <td><span class="stock-badge stock-high">In Stock</span></td>
+            <td><input type="text" class="price-input" value="1,150"></td>
+            <td><button class="save-btn">Update</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    // In a real app, clicking update would send a request to your database
+    document.querySelectorAll('.save-btn').forEach(btn => {
+      btn.onclick = function() {
+        const brand = this.closest('tr').cells[0].innerText;
+        const newPrice = this.closest('tr').querySelector('.price-input').value;
+        alert(`Price for ${brand} updated to KES ${newPrice}`);
+      }
+    });
+  </script>
+</body>
+</html>

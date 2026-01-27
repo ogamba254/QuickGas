@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select Gas | QuickGas Delivery</title>
+  
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
+
+  <style>
+    :root {
+      --bg-color: #f4f7f6;
+      --card-bg: #ffffff;
+      --text-main: #2c3e50;
+      --text-muted: #7f8c8d;
+      --accent: #e67e22;
+      --nav-bg: #2c3e50;
+      --shadow: rgba(0,0,0,0.08);
+      --border: #eeeeee;
+      --img-bg: #f9f9f9;
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #121212;
+      --card-bg: #1e1e1e;
+      --text-main: #e0e0e0;
+      --text-muted: #aaaaaa;
+      --nav-bg: #181818;
+      --shadow: rgba(0,0,0,0.4);
+      --border: #333333;
+      --img-bg: #252525;
+    }
+
+    body {
+      font-family: 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      margin: 0;
+      transition: background-color 0.3s;
+    }
+
+    .navbar {
+      background: var(--nav-bg);
+      padding: 15px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .nav-logo { color: white; text-decoration: none; font-weight: bold; font-size: 1.4rem; }
+
+    .theme-toggle {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+      padding: 8px 15px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+
+    header { text-align: center; margin-bottom: 40px; }
+
+    .filter-card {
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      margin-bottom: 40px;
+      display: flex;
+      justify-content: center;
+      border: 1px solid var(--border);
+    }
+
+    .filter-group { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 400px; text-align: center; }
+
+    select {
+      padding: 15px;
+      border-radius: 10px;
+      border: 2px solid var(--border);
+      background: var(--bg-color);
+      color: var(--text-main);
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    #gasList {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 30px;
+    }
+
+    .gas-card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 25px;
+      text-align: center;
+      border: 1px solid var(--border);
+      transition: 0.3s;
+    }
+
+    .gas-card:hover { transform: translateY(-10px); border-color: var(--accent); }
+
+    .img-container {
+      width: 100%;
+      height: 200px;
+      background: var(--img-bg);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
+
+    .img-container img {
+      max-width: 160px;
+      max-height: 160px;
+      object-fit: contain;
+    }
+
+    .brand-name { font-weight: 800; font-size: 1.3rem; display: block; text-transform: uppercase; }
+    .price-tag { color: var(--accent); font-size: 1.6rem; font-weight: 800; margin: 15px 0; display: block; }
+
+    .select-btn {
+      background: var(--nav-bg);
+      color: white;
+      padding: 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      width: 100%;
+      display: block;
+    }
+
+    .no-results { grid-column: 1 / -1; text-align: center; padding: 50px; color: var(--text-muted); font-style: italic; }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">🔥 QuickGas</a>
+    <button class="theme-toggle" id="theme-toggle">🌙 Dark Mode</button>
+  </nav>
+
+  <div class="container">
+    <header>
+      <h2>Find Your Refill</h2>
+      <p>Select your cylinder size to see brands and prices.</p>
+    </header>
+
+    <div class="filter-card">
+      <div class="filter-group">
+        <label>Choose Cylinder Size</label>
+        <select id="gasSize">
+          <option value="">-- Select Size --</option>
+          <option value="6kg">6kg (Small)</option>
+          <option value="13kg">13kg (Family)</option>
+          <option value="25kg">25kg (Large)</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="gasList">
+      <div class="no-results">Please select a size above to start.</div>
+    </div>
+  </div>
+
+  <script>
+    const gasData = [
+      // Premium Brands
+      { size: '6kg', brand: 'TotalEnergies', price: '1,250', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgV10h-PcggM75uatNCS7EonrEKxXORNf-ZQ&s' },
+      { size: '13kg', brand: 'TotalEnergies', price: '2,800', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1hFgJ5z6hxpvT4FX_bMZTU245wqn_J7pxwg&s' },
+      { size: '6kg', brand: 'Pro Gas', price: '1,200', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ15SARNneLAgWE9B1T6SRVJMzRZfI1mu_4ng&s' },
+      { size: '13kg', brand: 'Pro Gas', price: '2,750', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIx8m32RSQmmkFPg7ZhNPNG-xjgJ3kxGWePA&s' },
+      { size: '6kg', brand: 'K-Gas', price: '1,150', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxPpq-ymErqpIHVUYViqMmNkCC5tJ3Si5OfQ&s' },
+      { size: '13kg', brand: 'K-Gas', price: '2,650', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDfsQjzITtL-BM91EFnLBcs27h2w9iVt_tuA&s' },
+      { size: '6kg', brand: 'Afrigas', price: '1,250', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8pSfoJusaKvwRBEULNmIM2ydBrQS6La1xNg&s' },
+      { size: '13kg', brand: 'Afrigas', price: '2,850', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4ax3EDIryDD0KFOCe0rYM3pO_2whuiCIOgA&s' },
+      
+      // Oilibya / Ola
+      { size: '6kg', brand: 'Oilibya (Ola)', price: '1,210', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCNyLeNZmOz-2Eufva4hHsA50U4-oUITFfmg&s' },
+      { size: '13kg', brand: 'Oilibya (Ola)', price: '2,750', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZOfdb7xsXddyXLAcTcaqbwz__B6Ig1bs6yQ&s' },
+
+      // Mix Gas
+      { size: '6kg', brand: 'Mix Gas', price: '1,100', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhYVRf05iU559TvM5S62FgXAJI9fr-9tDZRQ&s' },
+      { size: '13kg', brand: 'Mix Gas', price: '2,500', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqyqZw6mpvMdJAOFb0pvZzWldkMSK_EdkESw&s' },
+
+      // Supa Gas
+      { size: '6kg', brand: 'Supa Gas', price: '1,150', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWe5AeUNviIBEOnTsyNrYpqb88Va3sXkCNQw&s' },
+      { size: '13kg', brand: 'Supa Gas', price: '2,600', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxHWPxe0GbBzUEWgQDZ_17zfVU_XUMVvv6Og&s' },
+
+      // Hash Gas
+      { size: '6kg', brand: 'Hash Gas', price: '1,050', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNguA_4iA6kpCYQ6t_2gmZJBd2HrEqHW7XHA&s' },
+      { size: '13kg', brand: 'Hash Gas', price: '2,450', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhA5iSU53orMAqIHI3qj-9cuNFXi2CvPpz7w&s' },
+      // Tosha Gas
+      { size: '6kg', brand: 'Tosha Gas', price: '1,180', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9p13QUYW0PaCm1xHxxejfhJBRnwv1cFt3YQ&s' },
+      { size: '13kg', brand: 'Tosha Gas', price: '2,680', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXkjTiySqkBOx0S0a3ySozprrJxLmgJU1QPsQVyafS7Q&s' }
+    ];
+
+    const sizeSelect = document.getElementById('gasSize');
+    const display = document.getElementById('gasList');
+
+    sizeSelect.addEventListener('change', function() {
+      const selectedSize = this.value;
+      display.innerHTML = "";
+      
+      if(!selectedSize) {
+        display.innerHTML = '<div class="no-results">Please select a size above to start.</div>';
+        return;
+      }
+
+      const filtered = gasData.filter(gas => gas.size === selectedSize);
+
+      filtered.forEach(gas => {
+        const card = document.createElement('div');
+        card.className = 'gas-card';
+        card.innerHTML = `
+          <div class="img-container">
+            <img src="${gas.img}" alt="${gas.brand}" onerror="this.src='https://via.placeholder.com/150x150?text=${gas.brand}'">
+          </div>
+          <span class="brand-name">${gas.brand}</span>
+          <span style="color: var(--text-muted); font-size: 0.9rem;">${gas.size} Refill</span>
+          <span class="price-tag">KES ${gas.price}</span>
+          <a href="order.html?brand=${encodeURIComponent(gas.brand)}&size=${gas.size}&price=${gas.price}" class="select-btn">Select ${gas.brand}</a>
+        `;
+        display.appendChild(card);
+      });
+    });
+
+    // Theme Toggle
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      const newTheme = isDark ? 'light' : 'dark';
+      html.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      document.getElementById('theme-toggle').innerText = newTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us | QuickGas</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      background-color: #f4f7f6;
+      color: #333;
+    }
+
+    /* Navigation (Matching your Home Page) */
+    .navbar {
+      background-color: #ffffff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 5%;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .nav-logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #2c3e50;
+      text-decoration: none;
+    }
+
+    /* Hero Section */
+    .about-hero {
+      background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+      color: white;
+      padding: 80px 10%;
+      text-align: center;
+    }
+
+    .about-hero h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+
+    .about-hero p {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 0 auto;
+      opacity: 0.9;
+    }
+
+    /* Content Section */
+    .container {
+      max-width: 1000px;
+      margin: -50px auto 50px;
+      padding: 0 20px;
+    }
+
+    .white-card {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .mission-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .mission-item {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .mission-item h3 {
+      color: #e67e22;
+      margin-bottom: 10px;
+    }
+
+    .icon {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      display: block;
+    }
+
+    .cta-footer {
+      text-align: center;
+      margin-top: 50px;
+      padding-bottom: 50px;
+    }
+
+    .btn {
+      background-color: #e67e22;
+      color: white;
+      padding: 12px 30px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #d35400;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">🔥 QuickGas</a>
+  </nav>
+
+  <section class="about-hero">
+    <h1>Our Mission</h1>
+    <p>Revolutionizing how you power your home by making gas delivery as simple as a single click.</p>
+  </section>
+
+  <div class="container">
+    <div class="white-card">
+      <h2>About QuickGas</h2>
+      <p>Founded in 2024, QuickGas was created to solve the "empty tank" crisis. We realized that families shouldn't have to carry heavy cylinders to the station or wait hours for a delivery. We’ve built a network of local professionals to ensure your kitchen never goes cold.</p>
+
+      <div class="mission-grid">
+        <div class="mission-item">
+          <span class="icon">🚀</span>
+          <h3>Ultra Fast</h3>
+          <p>Most deliveries arrive at your doorstep within 45 minutes of ordering.</p>
+        </div>
+        <div class="mission-item">
+          <span class="icon">🛡️</span>
+          <h3>Safety First</h3>
+          <p>All our cylinders are safety-checked and handled by trained professionals.</p>
+        </div>
+        <div class="mission-item">
+          <span class="icon">🤝</span>
+          <h3>Reliable</h3>
+          <p>With pay-on-delivery, you only pay once the gas is securely in your home.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-footer">
+    <a href="products.html" class="btn">Ready to Order?</a>
+  </div>
+
+</body>
+</html>

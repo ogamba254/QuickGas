@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Place Order | QuickGas</title>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <style>
+    /* Global Styles */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f7f6;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .order-container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      max-width: 500px;
+      width: 100%;
+    }
+
+    .selection-summary {
+      background: #fffaf5;
+      border: 1px dashed #e67e22;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+
+    .selection-summary h3 {
+      margin: 0 0 10px 0;
+      font-size: 1.1rem;
+      color: #e67e22;
+    }
+
+    .summary-details {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #2c3e50;
+      border-bottom: 2px solid #e67e22;
+      display: inline-block;
+      padding-bottom: 5px;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+
+    .form-group { margin-bottom: 15px; }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 5px;
+      font-size: 0.85rem;
+      color: #555;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      box-sizing: border-box;
+      font-size: 1rem;
+    }
+
+    input[readonly] {
+      background-color: #f9f9f9;
+      color: #2c3e50;
+      font-weight: 600;
+      border-color: #eef0f1;
+    }
+
+    .form-row { display: flex; gap: 15px; }
+    .form-row .form-group { flex: 1; }
+
+    button {
+      width: 100%;
+      background-color: #e67e22;
+      color: white;
+      padding: 15px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.3s;
+    }
+
+    button:hover { background-color: #d35400; }
+    button:disabled { background-color: #bdc3c7; cursor: not-allowed; }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #7f8c8d;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="order-container">
+    <h2>Complete Your Order</h2>
+
+    <div class="selection-summary">
+      <h3>Your Selection</h3>
+      <div class="summary-details" id="displaySelection">Detecting selection...</div>
+    </div>
+
+    <form id="orderForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Gas Brand</label>
+          <input type="text" id="formBrand" name="gasBrand" readonly>
+        </div>
+        <div class="form-group">
+          <label>Size</label>
+          <input type="text" id="formSize" name="gasSize" readonly>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Price (Pay on Delivery)</label>
+        <input type="text" id="formPrice" name="price" readonly>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+
+      <div class="form-group">
+        <label>Your Full Name</label>
+        <input type="text" id="customerName" name="name" placeholder="Enter your name" required>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" name="phone" placeholder="07..." required>
+        </div>
+        <div class="form-group">
+          <label>Email (For Confirmation)</label>
+          <input type="email" id="customerEmail" name="email" placeholder="email@address.com" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Delivery Address / Apartment</label>
+        <input type="text" name="address" placeholder="e.g. Sunshine Apts, Hse B4" required>
+      </div>
+
+      <button type="submit" id="submitBtn">Confirm Order — KES <span id="btnPrice">0</span></button>
+    </form>
+
+    <a href="products.html" class="back-link">← Change Selection</a>
+  </div>
+
+  <script>
+    // 1. INITIALIZE EMAILJS
+    // Replace "YOUR_PUBLIC_KEY" with the Public Key from your EmailJS Account settings
+    (function() {
+        emailjs.init("I2UHj5_9SB7Mgdy0I");
+    })();
+
+    window.onload = function() {
+      const params = new URLSearchParams(window.location.search);
+      const brand = params.get('brand') || "Not Selected";
+      const size = params.get('size') || "Not Selected";
+      const price = params.get('price') || "0";
+
+      document.getElementById('displaySelection').innerText = `${brand} (${size})`;
+      document.getElementById('formBrand').value = brand;
+      document.getElementById('formSize').value = size;
+      document.getElementById('formPrice').value = `KES ${price}`;
+      document.getElementById('btnPrice').innerText = price;
+    };
+
+    document.getElementById('orderForm').onsubmit = function(e) {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.innerText = "Processing Order...";
+      submitBtn.disabled = true;
+
+      // 2. SEND EMAIL TO SHOP & CUSTOMER
+      // Template Variables in EmailJS should match the "name" attributes in your HTML
+      // (e.g., {{name}}, {{phone}}, {{gasBrand}}, {{address}}, etc.)
+      
+      const serviceID = 'service_rcxeoog'; // e.g., 'service_gmail'
+      const shopTemplateID = 'template_ttumqrc'; // Template for Ogambadedalius@gmail.com
+      const customerTemplateID = 'template_7unxekb'; // Template for the customer
+
+      // Send to Shop
+      emailjs.sendForm(serviceID, shopTemplateID, this)
+        .then(() => {
+          // Send to Customer
+          return emailjs.sendForm(serviceID, customerTemplateID, this);
+        })
+        .then(() => {
+          alert("Success! Order sent to QuickGas. A confirmation has been sent to your email.");
+          window.location.href = "thank-you.html"; // Optional redirect
+        })
+        .catch((err) => {
+          alert("Oops! Something went wrong. Please try again.");
+          console.error("EmailJS Error:", err);
+          submitBtn.innerText = "Confirm Order";
+          submitBtn.disabled = false;
+        });
+    };
+  </script>
+</body>
+</html>

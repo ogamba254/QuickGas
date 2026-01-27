@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register | QuickGas</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Roboto, sans-serif;
+      background-color: #f4f7f6;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .register-card {
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      text-align: center;
+      max-width: 450px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .register-card h2 {
+      color: #2c3e50;
+      margin-bottom: 8px;
+      font-size: 1.8rem;
+    }
+
+    .register-card p {
+      color: #7f8c8d;
+      margin-bottom: 25px;
+      font-size: 0.9rem;
+    }
+
+    /* --- FORM STYLES --- */
+    .register-form {
+      text-align: left;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 5px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      font-size: 1rem;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #e67e22;
+      box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1);
+    }
+
+    .btn-register {
+      width: 100%;
+      background-color: #e67e22;
+      color: white;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.2s;
+    }
+
+    .btn-register:hover {
+      background-color: #d35400;
+    }
+
+    /* Benefits List */
+    .benefits {
+      text-align: left;
+      margin: 25px 0;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      list-style: none;
+      font-size: 0.85rem;
+      color: #555;
+    }
+
+    .benefits li {
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .benefits li::before {
+      content: '✓';
+      color: #27ae60;
+      font-weight: bold;
+    }
+
+    .footer-text {
+      margin-top: 25px;
+      font-size: 0.85rem;
+      color: #95a5a6;
+      border-top: 1px solid #eee;
+      padding-top: 20px;
+    }
+
+    .footer-text a {
+      color: #e67e22;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="register-card">
+    <h2>Create Account</h2>
+    <p>Join QuickGas for faster deliveries and tracking.</p>
+
+    <form class="register-form">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" placeholder="e.g. John Doe" required>
+      </div>
+
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" placeholder="e.g. 0712345678" required>
+      </div>
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" placeholder="name@example.com" required>
+      </div>
+
+      <div class="form-group">
+        <label>Create Password</label>
+        <input type="password" placeholder="At least 8 characters" required>
+      </div>
+
+      <button type="submit" class="btn-register">Create Account</button>
+    </form>
+
+    <ul class="benefits">
+      <li>✓ Faster checkout next time</li>
+      <li>✓ Real-time order tracking</li>
+      <li>✓ Exclusive member discounts</li>
+    </ul>
+
+    <div class="footer-text">
+      Already have an account? <a href="login.html">Log In</a>
+    </div>
+  </div>
+
+</body>
+</html>

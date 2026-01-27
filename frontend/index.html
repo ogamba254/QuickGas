@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuickGas | Fast & Reliable Delivery</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                  url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1HNL6XAly6dLD0eMwb4324JHHZbK13LDVzQ&s');
+      background-attachment: fixed;
+      background-size: cover;
+      background-position: center;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* --- NOTIFICATION STYLE --- */
+    #msg-box {
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        padding: 15px 25px;
+        border-radius: 8px;
+        color: white;
+        font-weight: bold;
+        display: none;
+        z-index: 2000;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        animation: fadeIn 0.5s;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+    .navbar {
+      background-color: rgba(255, 255, 255, 0.95);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 5%;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .nav-logo { font-size: 1.5rem; font-weight: bold; color: #2c3e50; text-decoration: none; display: flex; align-items: center; gap: 5px; }
+    .nav-menu { display: flex; gap: 30px; }
+    .nav-menu a { text-decoration: none; color: #2c3e50; font-weight: 600; transition: 0.3s; }
+    .nav-menu a:hover { color: #e67e22; }
+
+    .nav-auth-buttons { display: flex; gap: 15px; align-items: center; }
+    .nav-link { text-decoration: none; font-weight: 600; padding: 8px 18px; border-radius: 6px; }
+    .btn-login { color: #2c3e50; border: 1px solid #2c3e50; }
+    .btn-register { background-color: #e67e22; color: white; }
+
+    .profile-wrap { display: none; align-items: center; gap: 12px; background: #f8f9fa; padding: 5px 12px; border-radius: 50px; border: 1px solid #ddd; }
+    .user-img { width: 32px; height: 32px; border-radius: 50%; border: 2px solid #e67e22; }
+    .btn-logout { background: none; border: none; color: #e74c3c; font-weight: bold; cursor: pointer; font-size: 0.85rem; padding: 0; }
+    .btn-logout:hover { text-decoration: underline; }
+
+    .content-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; padding: 4rem 0; }
+    .hero-card { 
+        text-align: center; background: rgba(255, 255, 255, 0.9); padding: 3rem; 
+        border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); max-width: 450px; width: 90%; backdrop-filter: blur(5px); 
+    }
+    .hero-card::before { content: '🔥'; font-size: 3rem; display: block; margin-bottom: 10px; }
+    h1 { color: #2c3e50; font-size: 2.5rem; margin-bottom: 0.5rem; }
+    p { color: #34495e; font-size: 1.1rem; margin-bottom: 2rem; }
+
+    .cta-button { display: inline-block; background-color: #e67e22; color: white; padding: 14px 35px; text-decoration: none; font-weight: bold; border-radius: 8px; transition: 0.3s; box-shadow: 0 4px 15px rgba(230, 126, 34, 0.4); }
+    .cta-button:hover { background-color: #d35400; transform: translateY(-3px); }
+
+    footer { background-color: #1a252f; color: #ecf0f1; padding: 4rem 5% 2rem; margin-top: auto; }
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 30px; margin-bottom: 3rem; }
+    .footer-column h3 { color: #e67e22; font-size: 1rem; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1px; }
+    .footer-column ul { list-style: none; padding: 0; }
+    .footer-column ul li { margin-bottom: 0.8rem; }
+    .footer-column ul li a { color: #bdc3c7; text-decoration: none; font-size: 0.9rem; }
+    .footer-column ul li a:hover { color: #e67e22; }
+    
+    .team-member { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+    .team-avatar { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #e67e22; object-fit: cover; }
+    .footer-bottom { border-top: 1px solid #3e4f5f; padding-top: 2rem; text-align: center; font-size: 0.9rem; color: #7f8c8d; }
+
+    @media (max-width: 768px) { .nav-menu { display: none; } }
+  </style>
+</head>
+<body>
+
+  <div id="msg-box"></div>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo"><span>🔥</span> QuickGas</a>
+    <div class="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="about.html">About Us</a>
+      <a href="services.html">Services</a>
+    </div>
+
+    <div class="nav-auth-buttons">
+      <div id="auth-logged-out">
+        <a href="login.html" class="nav-link btn-login">Log In</a>
+        <a href="register.html" class="nav-link btn-register">Register</a>
+      </div>
+
+      <div id="auth-logged-in" class="profile-wrap">
+        <img id="profile-pic" src="" class="user-img" alt="User">
+        <div style="text-align: left;">
+            <div id="display-name" style="font-size: 0.8rem; font-weight: bold; color: #2c3e50;"></div>
+            <button id="logout-btn" class="btn-logout">Logout</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="content-wrapper">
+    <section class="hero-card">
+      <h1>QuickGas</h1>
+      <p>Fast & reliable gas delivery.<br><strong>Pay on delivery.</strong></p>
+      <a href="products.html" class="cta-button">Order Gas Now</a>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-column">
+        <h3 style="color: white;">QuickGas</h3>
+        <p style="color: #bdc3c7; font-size: 0.85rem;">Delivering safe, efficient cooking energy to your doorstep across Nairobi.</p>
+      </div>
+
+      <div class="footer-column">
+        <h3>Legal</h3>
+        <ul>
+          <li><a href="terms.html">Terms & Conditions</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="refunds.html">Refund Policy</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h3>Safety</h3>
+        <ul>
+          <li><a href="safety.html">Gas Safety Tips</a></li>
+          <li><a href="handling.html">Cylinder Handling</a></li>
+          <li><a href="emergency.html">Emergency Contacts</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h3>Leadership</h3>
+        <div class="team-member">
+          <img src="douglas.jpg" alt="" class="team-avatar">
+          <div class="team-info">
+            <h4 style="margin:0; font-size: 0.9rem;">Douglas Nyamiaka</h4>
+            <p style="margin:0; font-size: 0.8rem; color: #bdc3c7;">CEO & Founder</p>
+          </div>
+        </div>
+        <div class="team-member">
+          <img src="dedalius.jpg" alt="" class="team-avatar">
+          <div class="team-info">
+            <h4 style="margin:0; font-size: 0.9rem;">Dedalius Ogamba</h4>
+            <p style="margin:0; font-size: 0.8rem; color: #bdc3c7;">Web Moderator</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-column">
+        <h3>Contact</h3>
+        <ul style="color: #bdc3c7; font-size: 0.85rem;">
+          <li>📞 +254 700 000 000</li>
+          <li>✉️ support@quickgas.com</li>
+          <li>📍 Nairobi, Kenya</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 QuickGas Delivery. All rights reserved.</div>
+  </footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCsWWrq722NErnhLdPuTMTAE843cz7hedA",
+        authDomain: "quickgas-3ce4f.firebaseapp.com",
+        projectId: "quickgas-3ce4f",
+        storageBucket: "quickgas-3ce4f.firebasestorage.app",
+        messagingSenderId: "808986496518",
+        appId: "1:808986496518:web:51a0c11d36f42248377d87"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const loggedOutUI = document.getElementById('auth-logged-out');
+    const loggedInUI = document.getElementById('auth-logged-in');
+    const msgBox = document.getElementById('msg-box');
+
+    function showMsg(text, bgColor) {
+        msgBox.innerText = text;
+        msgBox.style.backgroundColor = bgColor;
+        msgBox.style.display = 'block';
+        setTimeout(() => { msgBox.style.display = 'none'; }, 3500);
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        loggedOutUI.style.display = 'none';
+        loggedInUI.style.display = 'flex';
+        document.getElementById('display-name').innerText = user.displayName || user.email;
+        document.getElementById('profile-pic').src = user.photoURL || 'https://via.placeholder.com/32';
+        
+        if(sessionStorage.getItem('showLoginMsg') === 'true') {
+            showMsg("Login Successful! Welcome to QuickGas.", "#27ae60");
+            sessionStorage.removeItem('showLoginMsg');
+        }
+      } else {
+        loggedOutUI.style.display = 'flex';
+        loggedInUI.style.display = 'none';
+        
+        if(sessionStorage.getItem('showLogoutMsg') === 'true') {
+            showMsg("Logged out successfully!", "#e67e22");
+            sessionStorage.removeItem('showLogoutMsg');
+        }
+      }
+    });
+
+    document.getElementById('logout-btn').addEventListener('click', () => {
+        signOut(auth).then(() => {
+            sessionStorage.setItem('showLogoutMsg', 'true');
+            window.location.reload();
+        });
+    });
+  </script>
+</body>
+</html>

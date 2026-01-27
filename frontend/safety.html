@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Safety Guidelines | QuickGas</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      background-color: #f4f7f6;
+      color: #333;
+    }
+
+    /* Navigation */
+    .navbar {
+      background-color: #ffffff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 5%;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .nav-logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #2c3e50;
+      text-decoration: none;
+    }
+
+    /* Header */
+    .safety-header {
+      background: #c0392b; /* Safety Red */
+      color: white;
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .safety-header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    /* Safety Grid */
+    .safety-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: 30px;
+    }
+
+    .safety-card {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+
+    .safety-card h2 {
+      margin-top: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .do-list h2 { color: #27ae60; }
+    .dont-list h2 { color: #c0392b; }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul li {
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      gap: 10px;
+    }
+
+    .do-list li::before { content: '✅'; }
+    .dont-list li::before { content: '❌'; }
+
+    /* Emergency Section */
+    .emergency-box {
+      background: #fff;
+      border: 2px dashed #c0392b;
+      padding: 30px;
+      margin-top: 40px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .emergency-box h2 {
+      color: #c0392b;
+      margin-top: 0;
+    }
+
+    .emergency-phone {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #2c3e50;
+      display: block;
+      margin: 10px 0;
+    }
+
+    @media (max-width: 600px) {
+      .safety-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">🔥 QuickGas</a>
+  </nav>
+
+  <header class="safety-header">
+    <h1>Gas Safety First</h1>
+    <p>Your safety is our priority. Please follow these guidelines for home gas usage.</p>
+  </header>
+
+  <main class="container">
+    
+    <div class="safety-grid">
+      <div class="safety-card do-list">
+        <h2>What You Should Do</h2>
+        <ul>
+          <li>Keep the cylinder in an upright position at all times.</li>
+          <li>Ensure the kitchen is well-ventilated when cooking.</li>
+          <li>Check the rubber "O-ring" inside the valve for cracks.</li>
+          <li>Close the regulator switch when the stove is not in use.</li>
+          <li>Use soapy water to check for leaks (look for bubbles).</li>
+        </ul>
+      </div>
+
+      <div class="safety-card dont-list">
+        <h2>What You Should Avoid</h2>
+        <ul>
+          <li>Never use a flame (matchstick/lighter) to check for leaks.</li>
+          <li>Do not store cylinders in basements or unventilated cupboards.</li>
+          <li>Don't keep flammable materials (curtains, oil) near the stove.</li>
+          <li>Never try to repair a dented or leaking cylinder yourself.</li>
+          <li>Do not leave your cooking unattended for long periods.</li>
+        </ul>
+      </div>
+    </div>
+
+    <section class="emergency-box">
+      <h2>In Case of a Gas Leak</h2>
+      <p>If you smell gas, do not flip any electrical switches. Extinguish all open flames, open all windows, and move the cylinder outside if safe to do so.</p>
+      <p><strong>Emergency Contact:</strong></p>
+      <span class="emergency-phone">0700-999-999</span>
+      <p>Our safety team is available 24/7 for emergency assistance.</p>
+    </section>
+
+  </main>
+
+</body>
+</html>
