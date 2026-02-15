@@ -20,7 +20,7 @@ const CONSUMER_KEY = 'DAJ4TVWIDWFrwSzqw8s6O0BrmCgi9fTQnNjs7k9nTCq1AWMh';
 const CONSUMER_SECRET = 'RNXea4PkWGw1IwoLIQEushraNNNjzNlXSxe1DCZ8GbrDfoUIn50Awc4nmTRHAS5f';
 const PASSKEY = 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919';
 const SHORTCODE = '174379'; 
-const CALLBACK_URL = 'https://quickgas.onrender.com/callback'; 
+const CALLBACK_URL = 'https://quickgas-1.onrender.com/callback'; 
 
 const BASE_URL = 'https://sandbox.safaricom.co.ke'; 
 
