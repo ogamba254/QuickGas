@@ -2,23 +2,25 @@ const express = require('express');
 const axios = require('axios');
 const cors = require('cors'); 
 const app = express();
-const port = 3000;
 
-// --- CORRECTION 1: ALLOW LIVE SERVER ---
+// --- CORRECTION 1: USE RENDER'S DYNAMIC PORT ---
+// We use process.env.PORT because Render assigns a random port
+const port = process.env.PORT || 3000;
+
 app.use(cors({
-    origin: 'http://127.0.0.1:5500', // Allows your Live Server to connect
+    origin: ['https://quickgass.netlify.app', 'http://127.0.0.1:5500'], 
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type']
 }));
 
 app.use(express.json());
 
-// --- DARAJA SANDBOX DETAILS ---
+// --- DARAJA SANDBOX DETAILS (LEAVING AS REQUESTED) ---
 const CONSUMER_KEY = 'DAJ4TVWIDWFrwSzqw8s6O0BrmCgi9fTQnNjs7k9nTCq1AWMh';
 const CONSUMER_SECRET = 'RNXea4PkWGw1IwoLIQEushraNNNjzNlXSxe1DCZ8GbrDfoUIn50Awc4nmTRHAS5f';
 const PASSKEY = 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919';
 const SHORTCODE = '174379'; 
-const CALLBACK_URL = 'https://mydomain.com/callback'; 
+const CALLBACK_URL = 'https://quickgas.onrender.com/callback'; 
 
 const BASE_URL = 'https://sandbox.safaricom.co.ke'; 
 
@@ -78,7 +80,13 @@ app.post('/stkpush', async (req, res) => {
     }
 });
 
-// --- CORRECTION 2: BIND TO 127.0.0.1 ---
-app.listen(port, '127.0.0.1', () => {
-    console.log(`🚀 Backend server is running on http://127.0.0.1:${port}`);
+// Home route so Render can verify the site is up
+app.get('/', (req, res) => {
+    res.send('QuickGas Backend is Live!');
+});
+
+// --- CORRECTION 2: BIND TO 0.0.0.0 ---
+// Render needs 0.0.0.0 to detect the open port from outside
+app.listen(port, '0.0.0.0', () => {
+    console.log(`🚀 Backend server is running on port ${port}`);
 });
