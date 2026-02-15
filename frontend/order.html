@@ -88,8 +88,6 @@
 
     button {
       width: 100%;
-      background-color: #e67e22;
-      color: white;
       padding: 15px;
       border: none;
       border-radius: 6px;
@@ -97,10 +95,28 @@
       font-weight: bold;
       cursor: pointer;
       margin-top: 10px;
-      transition: background 0.3s;
+      transition: opacity 0.3s;
     }
 
-    button:hover { background-color: #d35400; }
+    /* Original Order Button */
+    #submitBtn {
+      background-color: #e67e22;
+      color: white;
+    }
+    #submitBtn:hover { background-color: #d35400; }
+
+    /* NEW M-Pesa Button Styling */
+    .mpesa-btn {
+      background-color: #4db848; /* M-Pesa Green */
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      margin-top: 12px;
+    }
+    .mpesa-btn:hover { background-color: #3e9e3a; }
+
     button:disabled { background-color: #bdc3c7; cursor: not-allowed; }
 
     .back-link {
@@ -136,7 +152,7 @@
       </div>
 
       <div class="form-group">
-        <label>Price (Pay on Delivery)</label>
+        <label>Price</label>
         <input type="text" id="formPrice" name="price" readonly>
       </div>
 
@@ -164,6 +180,8 @@
       </div>
 
       <button type="submit" id="submitBtn">Confirm Order — KES <span id="btnPrice">0</span></button>
+      
+      <button type="button" id="mpesaBtn" class="mpesa-btn">Pay with M-Pesa</button>
     </form>
 
     <a href="products.html" class="back-link">← Change Selection</a>
@@ -175,17 +193,26 @@
         emailjs.init("I2UHj5_9SB7Mgdy0I");
     })();
 
+    let currentPrice = "0";
+
     window.onload = function() {
       const params = new URLSearchParams(window.location.search);
       const brand = params.get('brand') || "Not Selected";
       const size = params.get('size') || "Not Selected";
-      const price = params.get('price') || "0";
+      currentPrice = params.get('price') || "0";
 
       document.getElementById('displaySelection').innerText = `${brand} (${size})`;
       document.getElementById('formBrand').value = brand;
       document.getElementById('formSize').value = size;
-      document.getElementById('formPrice').value = `KES ${price}`;
-      document.getElementById('btnPrice').innerText = price;
+      document.getElementById('formPrice').value = `KES ${currentPrice}`;
+      document.getElementById('btnPrice').innerText = currentPrice;
+    };
+
+    // M-Pesa Button Logic
+    document.getElementById('mpesaBtn').onclick = function() {
+        // Redirect to your payment page. 
+        // You can also pass the price in the URL if needed.
+        window.location.href = "payment.html?amount=" + currentPrice;
     };
 
     document.getElementById('orderForm').onsubmit = function(e) {
@@ -199,19 +226,13 @@
       const shopTemplateID = 'template_ttumqrc'; 
       const customerTemplateID = 'template_7unxekb'; 
 
-      // Send to Shop
       emailjs.sendForm(serviceID, shopTemplateID, this)
         .then(() => {
-          // Send to Customer
           return emailjs.sendForm(serviceID, customerTemplateID, this);
         })
         .then(() => {
-          // Tell the homepage to show a success message after redirecting
           sessionStorage.setItem('orderSuccess', 'true');
-          
           alert("Success! Your order has been placed. Redirecting home...");
-          
-          // Automatic Redirect to Home
           window.location.href = "index.html";
         })
         .catch((err) => {

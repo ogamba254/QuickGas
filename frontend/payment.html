@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M-Pesa Checkout | QuickGas</title>
+    <style>
+        :root {
+            --mpesa-green: #4db848;
+            --mpesa-dark: #3e9e3a;
+            --bg-color: #f0f2f5;
+            --text-main: #2d3436;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .payment-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .secure-tag {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #636e72;
+            display: block;
+            margin-bottom: 30px;
+        }
+
+        .amount-section {
+            margin-bottom: 30px;
+        }
+
+        .amount-label {
+            font-size: 14px;
+            color: #636e72;
+            margin-bottom: 5px;
+        }
+
+        .amount-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .input-group {
+            text-align: left;
+            margin-bottom: 25px;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input[type="tel"] {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input[type="tel"]:focus {
+            outline: none;
+            border-color: var(--mpesa-green);
+        }
+
+        .pay-btn {
+            background-color: var(--mpesa-green);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+        }
+
+        .pay-btn:disabled {
+            background-color: #b2bec3;
+            cursor: not-allowed;
+        }
+
+        .loader {
+            display: none;
+            margin: 15px auto 0;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--mpesa-green);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <div class="payment-card">
+        <span class="secure-tag">Secure Checkout</span>
+        <h1 style="color: #4db848; margin: 0;">M-Pesa</h1>
+        
+        <div class="amount-section">
+            <div class="amount-label">Amount Due</div>
+            <div class="amount-value">KES <span id="displayAmount">0.00</span></div>
+        </div>
+
+        <form id="paymentForm">
+            <div class="input-group">
+                <label for="phone">Enter M-Pesa Phone Number</label>
+                <input type="tel" id="phone" placeholder="e.g. 0701087111" required>
+            </div>
+
+            <button type="submit" id="payBtn" class="pay-btn">COMPLETE ORDER & PAY</button>
+            <div id="loader" class="loader"></div>
+        </form>
+    </div>
+<script>
+    // 1. Get amount from URL and display it
+    const params = new URLSearchParams(window.location.search);
+    const rawAmount = params.get('amount') || "0";
+    document.getElementById('displayAmount').innerText = rawAmount;
+
+    // Helper: Formats phone number to 254XXXXXXXXX
+    function formatPhoneNumber(phone) {
+        let clean = phone.replace(/\D/g, ''); 
+        if (clean.startsWith('0')) return '254' + clean.substring(1);
+        if (clean.startsWith('7') || clean.startsWith('1')) return '254' + clean;
+        return clean;
+    }
+
+    // 2. Handle Form Submission
+    document.getElementById('paymentForm').onsubmit = async function(e) {
+        e.preventDefault();
+        
+        const phoneInput = document.getElementById('phone').value;
+        const formattedPhone = formatPhoneNumber(phoneInput);
+        const btn = document.getElementById('payBtn');
+        const loader = document.getElementById('loader');
+        
+        // Ensure amount is a whole number (Daraja requirement)
+        const finalAmount = Math.round(parseFloat(rawAmount));
+
+        if (finalAmount <= 0) {
+            alert("Invalid amount. Please return to the cart and try again.");
+            return;
+        }
+
+        // UI Feedback
+        btn.disabled = true;
+        btn.innerText = "Check your phone...";
+        loader.style.display = "block";
+
+        try {
+            // Target the 127.0.0.1 IP specifically to match Live Server
+            const response = await fetch('http://127.0.0.1:3000/stkpush', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json' 
+                },
+                body: JSON.stringify({
+                    phone: formattedPhone,
+                    amount: finalAmount
+                })
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Server responded with ${response.status}: ${errorText}`);
+            }
+
+            const data = await response.json();
+
+            if (data.ResponseCode === "0") {
+                alert("✅ STK Push Sent! Enter your M-Pesa PIN on your phone to finish.");
+            } else {
+                alert("❌ M-Pesa Error: " + (data.CustomerMessage || "Transaction failed."));
+            }
+        } catch (error) {
+            console.error("Connection Detailed Error:", error);
+            alert("⚠️ Connection Failed. Ensure your Node.js server (server.js) is actually running in the terminal.");
+        } finally {
+            btn.disabled = false;
+            btn.innerText = "COMPLETE ORDER & PAY";
+            loader.style.display = "none";
+        }
+    };
+</script>
+</body>
+</html>
