@@ -98,14 +98,12 @@
       transition: 0.3s;
     }
 
-    /* Original Order Button */
     #submitBtn {
       background-color: #e67e22;
       color: white;
     }
     #submitBtn:hover { background-color: #d35400; }
 
-    /* M-Pesa Button Styling */
     .mpesa-btn {
       background-color: #4db848; 
       color: white;
@@ -179,7 +177,7 @@
         <input type="text" name="address" id="customerAddress" placeholder="e.g. Sunshine Apts, Hse B4" required>
       </div>
 
-      <button type="submit" id="submitBtn">Confirm Order — KES <span id="btnPrice">0</span></button>
+      <button type="submit" id="submitBtn">Confirm Order (Email) — KES <span id="btnPrice">0</span></button>
       
       <button type="button" id="mpesaBtn" class="mpesa-btn">Pay via M-Pesa Now</button>
     </form>
@@ -188,7 +186,6 @@
   </div>
 
   <script>
-    // 1. INITIALIZE EMAILJS
     (function() {
         emailjs.init("I2UHj5_9SB7Mgdy0I");
     })();
@@ -200,7 +197,6 @@
       const brand = params.get('brand') || "Not Selected";
       const size = params.get('size') || "Not Selected";
       
-      // Clean up price: Remove "KES", spaces, or commas to ensure a pure number
       let rawPrice = params.get('price') || "0";
       currentPrice = rawPrice.replace(/[^\d]/g, ''); 
 
@@ -215,25 +211,24 @@
     document.getElementById('mpesaBtn').onclick = function() {
         const form = document.getElementById('orderForm');
         
-        // Ensure form is filled before allowing payment
         if (!form.checkValidity()) {
             form.reportValidity(); 
             return;
         }
 
-        // Optional: Save delivery info to sessionStorage so payment page can see it
+        // Saving EVERYTHING to sessionStorage for the receipt page
         const deliveryDetails = {
             name: document.getElementById('customerName').value,
             phone: document.getElementById('customerPhone').value,
-            address: document.getElementById('customerAddress').value
+            address: document.getElementById('customerAddress').value,
+            brand: document.getElementById('formBrand').value, // Saved brand
+            size: document.getElementById('formSize').value    // Saved size
         };
         sessionStorage.setItem('pendingDelivery', JSON.stringify(deliveryDetails));
 
-        // Redirect to payment page with CLEAN price
         window.location.href = "payment.html?amount=" + currentPrice;
     };
 
-    // --- ORIGINAL EMAILJS LOGIC ---
     document.getElementById('orderForm').onsubmit = function(e) {
       e.preventDefault();
       
