@@ -95,7 +95,7 @@
       font-weight: bold;
       cursor: pointer;
       margin-top: 10px;
-      transition: opacity 0.3s;
+      transition: 0.3s;
     }
 
     /* Original Order Button */
@@ -105,9 +105,9 @@
     }
     #submitBtn:hover { background-color: #d35400; }
 
-    /* NEW M-Pesa Button Styling */
+    /* M-Pesa Button Styling */
     .mpesa-btn {
-      background-color: #4db848; /* M-Pesa Green */
+      background-color: #4db848; 
       color: white;
       display: flex;
       align-items: center;
@@ -166,7 +166,7 @@
       <div class="form-row">
         <div class="form-group">
           <label>Phone Number</label>
-          <input type="tel" name="phone" placeholder="07..." required>
+          <input type="tel" name="phone" id="customerPhone" placeholder="07..." required>
         </div>
         <div class="form-group">
           <label>Email (For Confirmation)</label>
@@ -176,12 +176,12 @@
 
       <div class="form-group">
         <label>Delivery Address / Apartment</label>
-        <input type="text" name="address" placeholder="e.g. Sunshine Apts, Hse B4" required>
+        <input type="text" name="address" id="customerAddress" placeholder="e.g. Sunshine Apts, Hse B4" required>
       </div>
 
       <button type="submit" id="submitBtn">Confirm Order — KES <span id="btnPrice">0</span></button>
       
-      <button type="button" id="mpesaBtn" class="mpesa-btn">Pay with M-Pesa</button>
+      <button type="button" id="mpesaBtn" class="mpesa-btn">Pay via M-Pesa Now</button>
     </form>
 
     <a href="products.html" class="back-link">← Change Selection</a>
@@ -199,22 +199,41 @@
       const params = new URLSearchParams(window.location.search);
       const brand = params.get('brand') || "Not Selected";
       const size = params.get('size') || "Not Selected";
-      currentPrice = params.get('price') || "0";
+      
+      // Clean up price: Remove "KES", spaces, or commas to ensure a pure number
+      let rawPrice = params.get('price') || "0";
+      currentPrice = rawPrice.replace(/[^\d]/g, ''); 
 
       document.getElementById('displaySelection').innerText = `${brand} (${size})`;
       document.getElementById('formBrand').value = brand;
       document.getElementById('formSize').value = size;
-      document.getElementById('formPrice').value = `KES ${currentPrice}`;
-      document.getElementById('btnPrice').innerText = currentPrice;
+      document.getElementById('formPrice').value = `KES ${parseInt(currentPrice).toLocaleString()}`;
+      document.getElementById('btnPrice').innerText = parseInt(currentPrice).toLocaleString();
     };
 
-    // M-Pesa Button Logic
+    // --- UPDATED M-PESA BUTTON LOGIC ---
     document.getElementById('mpesaBtn').onclick = function() {
-        // Redirect to your payment page. 
-        // You can also pass the price in the URL if needed.
+        const form = document.getElementById('orderForm');
+        
+        // Ensure form is filled before allowing payment
+        if (!form.checkValidity()) {
+            form.reportValidity(); 
+            return;
+        }
+
+        // Optional: Save delivery info to sessionStorage so payment page can see it
+        const deliveryDetails = {
+            name: document.getElementById('customerName').value,
+            phone: document.getElementById('customerPhone').value,
+            address: document.getElementById('customerAddress').value
+        };
+        sessionStorage.setItem('pendingDelivery', JSON.stringify(deliveryDetails));
+
+        // Redirect to payment page with CLEAN price
         window.location.href = "payment.html?amount=" + currentPrice;
     };
 
+    // --- ORIGINAL EMAILJS LOGIC ---
     document.getElementById('orderForm').onsubmit = function(e) {
       e.preventDefault();
       
@@ -232,11 +251,11 @@
         })
         .then(() => {
           sessionStorage.setItem('orderSuccess', 'true');
-          alert("Success! Your order has been placed. Redirecting home...");
+          alert("Order Confirmed! We will contact you shortly for delivery.");
           window.location.href = "index.html";
         })
         .catch((err) => {
-          alert("Oops! Something went wrong. Please try again.");
+          alert("Oops! Something went wrong. Please check your connection.");
           console.error("EmailJS Error:", err);
           submitBtn.innerText = "Confirm Order";
           submitBtn.disabled = false;

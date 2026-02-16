@@ -68,6 +68,7 @@
             font-size: 16px;
             font-weight: 700;
             cursor: pointer;
+            transition: 0.3s;
         }
 
         .pay-btn:disabled { background-color: #b2bec3; cursor: not-allowed; }
@@ -110,12 +111,18 @@
         </form>
     </div>
 
-
-
 <script>
+    // 1. Extract and Validate Amount
     const params = new URLSearchParams(window.location.search);
-    const rawAmount = params.get('amount') || "0";
-    document.getElementById('displayAmount').innerText = rawAmount;
+    const rawAmount = params.get('amount');
+    
+    // Convert to number immediately to catch errors early
+    const finalAmountValue = rawAmount ? parseFloat(rawAmount) : 0;
+    
+    // Display the amount nicely
+    document.getElementById('displayAmount').innerText = finalAmountValue > 0 
+        ? finalAmountValue.toLocaleString() 
+        : "0.00";
 
     function formatPhoneNumber(phone) {
         let clean = phone.replace(/\D/g, ''); 
@@ -127,13 +134,19 @@
     document.getElementById('paymentForm').onsubmit = async function(e) {
         e.preventDefault();
         
+        // Final check before sending to backend
+        if (finalAmountValue <= 0) {
+            alert("⚠️ Error: No valid amount detected. Please go back and select a product.");
+            return;
+        }
+
         const phoneInput = document.getElementById('phone').value;
         const formattedPhone = formatPhoneNumber(phoneInput);
         const btn = document.getElementById('payBtn');
         const loader = document.getElementById('loader');
         const statusMsg = document.getElementById('statusMsg');
-        const finalAmount = Math.round(parseFloat(rawAmount));
 
+        // UI Feedback
         btn.disabled = true;
         btn.innerText = "Check your phone...";
         loader.style.display = "block";
@@ -142,61 +155,66 @@
             const response = await fetch('https://quickgas-1.onrender.com/stkpush', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ phone: formattedPhone, amount: finalAmount })
+                body: JSON.stringify({ 
+                    phone: formattedPhone, 
+                    amount: Math.round(finalAmountValue) // Ensure it's a whole number for Daraja
+                })
             });
 
             const data = await response.json();
 
             if (data.CheckoutRequestID) {
                 statusMsg.style.display = "block";
-                // Start checking status
-                pollTransactionStatus(data.CheckoutRequestID);
+                pollTransactionStatus(data.CheckoutRequestID, finalAmountValue);
             } else {
-                alert("Error sending STK Push.");
-                btn.disabled = false;
-                loader.style.display = "none";
+                alert("❌ M-Pesa Error: " + (data.CustomerMessage || "Failed to start transaction."));
+                resetUI();
             }
         } catch (error) {
-            alert("Connection Failed. Check your server.");
+            alert("⚠️ Connection Failed. Check if your server is running.");
+            resetUI();
+        }
+
+        function resetUI() {
             btn.disabled = false;
+            btn.innerText = "COMPLETE ORDER & PAY";
             loader.style.display = "none";
         }
     };
 
-    // --- NEW FEATURE: POLLING LOGIC ---
-    async function pollTransactionStatus(checkoutID) {
+    async function pollTransactionStatus(checkoutID, amountPaid) {
         const startTime = Date.now();
-        const duration = 60000; // 60 seconds
+        const duration = 60000; 
         const statusMsg = document.getElementById('statusMsg');
 
         const interval = setInterval(async () => {
             const timeLeft = Math.round((duration - (Date.now() - startTime)) / 1000);
-            statusMsg.innerText = `Waiting for payment... (${timeLeft}s)`;
+            statusMsg.innerText = `Waiting for payment confirmation... (${timeLeft}s)`;
 
             if (timeLeft <= 0) {
                 clearInterval(interval);
-                alert("Payment timed out. Redirecting to Home.");
-                window.location.href = "index.html"; // Redirect Home
+                alert("⏰ Timeout: We didn't receive your payment in time.");
+                window.location.href = "index.html"; 
                 return;
             }
 
             try {
-                // You need a route on your server called /query-status
                 const check = await fetch(`https://quickgas-1.onrender.com/query-status/${checkoutID}`);
                 const result = await check.json();
 
                 if (result.status === "PAID") {
                     clearInterval(interval);
-                    window.location.href = `receipt.html?id=${checkoutID}&amount=${rawAmount}`; // Redirect to Receipt
-                } else if (result.status === "CANCELLED") {
+                    // Redirecting to receipt with the actual amount paid
+                    window.location.href = `receipt.html?id=${checkoutID}&amount=${amountPaid}`;
+                } else if (result.status === "FAILED") {
                     clearInterval(interval);
-                    alert("Transaction was cancelled.");
+                    alert("❌ Transaction cancelled or failed.");
                     window.location.reload();
                 }
             } catch (e) {
-                console.log("Waiting for callback...");
+                console.log("Waiting for M-Pesa callback...");
             }
-        }, 3000); // Check every 3 seconds
+        }, 3000);
     }
 </script>
 </body>
