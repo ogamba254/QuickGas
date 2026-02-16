@@ -112,14 +112,10 @@
     </div>
 
 <script>
-    // 1. Extract and Validate Amount
     const params = new URLSearchParams(window.location.search);
     const rawAmount = params.get('amount');
-    
-    // Convert to number immediately to catch errors early
     const finalAmountValue = rawAmount ? parseFloat(rawAmount) : 0;
     
-    // Display the amount nicely
     document.getElementById('displayAmount').innerText = finalAmountValue > 0 
         ? finalAmountValue.toLocaleString() 
         : "0.00";
@@ -134,7 +130,6 @@
     document.getElementById('paymentForm').onsubmit = async function(e) {
         e.preventDefault();
         
-        // Final check before sending to backend
         if (finalAmountValue <= 0) {
             alert("⚠️ Error: No valid amount detected. Please go back and select a product.");
             return;
@@ -146,7 +141,6 @@
         const loader = document.getElementById('loader');
         const statusMsg = document.getElementById('statusMsg');
 
-        // UI Feedback
         btn.disabled = true;
         btn.innerText = "Check your phone...";
         loader.style.display = "block";
@@ -157,7 +151,7 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
                     phone: formattedPhone, 
-                    amount: Math.round(finalAmountValue) // Ensure it's a whole number for Daraja
+                    amount: Math.round(finalAmountValue)
                 })
             });
 
@@ -193,7 +187,7 @@
 
             if (timeLeft <= 0) {
                 clearInterval(interval);
-                alert("⏰ Timeout: We didn't receive your payment in time.");
+                alert("⏰ Timeout: We didn't receive your payment. Taking you back home.");
                 window.location.href = "index.html"; 
                 return;
             }
@@ -204,12 +198,12 @@
 
                 if (result.status === "PAID") {
                     clearInterval(interval);
-                    // Redirecting to receipt with the actual amount paid
                     window.location.href = `receipt.html?id=${checkoutID}&amount=${amountPaid}`;
                 } else if (result.status === "FAILED") {
+                    // --- REDIRECT TO HOME ON CANCEL/FAILURE ---
                     clearInterval(interval);
-                    alert("❌ Transaction cancelled or failed.");
-                    window.location.reload();
+                    alert("❌ Transaction was cancelled or failed. Redirecting to home.");
+                    window.location.href = "index.html"; 
                 }
             } catch (e) {
                 console.log("Waiting for M-Pesa callback...");
