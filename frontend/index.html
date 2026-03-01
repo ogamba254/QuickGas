@@ -5,23 +5,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QuickGas | Fast & Reliable Delivery</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  
   <style>
-    /* --- RESET & BASE --- */
-    * { box-sizing: border-box; }
-
-    body {
-      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      line-height: 1.6;
-      margin: 0;
-      background: #000;
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* --- RESPONSIVE BACKGROUND --- */
+    /* Custom Animations & Background */
     .bg-animation-layer {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -34,197 +22,151 @@
     }
 
     @keyframes kenBurns { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
-
-    /* --- NOTIFICATION STYLE --- */
-    #msg-box {
-        position: fixed;
-        top: 80px;
-        right: 20px;
-        padding: 15px 25px;
-        border-radius: 8px;
-        color: white;
-        font-weight: bold;
-        display: none;
-        z-index: 2000;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        animation: fadeIn 0.5s;
-    }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
-    /* --- NAVBAR --- */
-    .navbar {
-      background-color: rgba(255, 255, 255, 0.95);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 5%;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      backdrop-filter: blur(10px);
-    }
-
-    .nav-logo { font-size: 1.5rem; font-weight: bold; color: #2c3e50; text-decoration: none; display: flex; align-items: center; gap: 5px; }
-    .nav-logo span { animation: pulse 1.5s infinite; }
-    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
-
-    .nav-menu { display: flex; gap: 30px; }
-    .nav-menu a { text-decoration: none; color: #2c3e50; font-weight: 600; transition: 0.3s; }
-    .nav-menu a:hover { color: #e67e22; }
-
-    .nav-auth-buttons { display: flex; gap: 15px; align-items: center; }
-    .nav-link { text-decoration: none; font-weight: 600; padding: 8px 18px; border-radius: 6px; }
-    .btn-login { color: #2c3e50; border: 1px solid #2c3e50; }
-    .btn-register { background-color: #e67e22; color: white; transition: 0.3s; }
-
-    .profile-wrap { display: none; align-items: center; gap: 12px; background: #f8f9fa; padding: 5px 12px; border-radius: 50px; border: 1px solid #ddd; }
-    .user-img { width: 32px; height: 32px; border-radius: 50%; border: 2px solid #e67e22; }
-    .btn-logout { background: none; border: none; color: #e74c3c; font-weight: bold; cursor: pointer; font-size: 0.85rem; padding: 0; }
-
-    /* --- HERO CARD & INNER MASCOT --- */
-    .content-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; padding: 2rem 20px; }
     
-    .hero-card { 
-        text-align: center; 
-        background: rgba(255, 255, 255, 0.94); 
-        padding: 2.5rem; 
-        border-radius: 30px; 
-        box-shadow: 0 25px 50px rgba(0,0,0,0.3); 
-        width: 100%;
-        max-width: 420px; 
-        backdrop-filter: blur(12px); 
-        border: 1px solid rgba(255,255,255,0.4);
-    }
+    .nav-logo span { animation: pulse 1.5s infinite; display: inline-block; }
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
 
-    .mascot-container-inner {
-        position: relative;
-        width: 150px; 
-        margin: 0 auto 1rem auto;
-        animation: float 4s infinite ease-in-out;
-    }
-
-    .human-mascot { width: 100%; height: auto; border-radius: 15px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2)); }
-
+    .mascot-float { animation: float 4s infinite ease-in-out; }
     @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-    .sparkle { position: absolute; font-size: 1.5rem; animation: glimmer 1.5s infinite; pointer-events: none; }
-    @keyframes glimmer { 0%, 100% { transform: scale(0.5); opacity: 0; } 50% { transform: scale(1.2); opacity: 1; } }
 
-    /* --- FOOTER --- */
-    footer { background-color: #0b1118; color: #ecf0f1; padding: 4rem 5% 2rem; margin-top: auto; border-top: 4px solid #e67e22; position: relative; z-index: 10; }
-    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 30px; margin-bottom: 3rem; }
-    .footer-column h3 { color: #e67e22; font-size: 1rem; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1px; }
-    .footer-column ul { list-style: none; padding: 0; }
-    .footer-column ul li { margin-bottom: 0.8rem; }
-    .footer-column ul li a { color: #bdc3c7; text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
-    .footer-column ul li a:hover { color: #e67e22; padding-left: 5px; }
-    
-    .team-member { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
-    .team-avatar { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #e67e22; object-fit: cover; }
-    .footer-bottom { border-top: 1px solid #3e4f5f; padding-top: 2rem; text-align: center; font-size: 0.9rem; color: #7f8c8d; }
+    /* Hide scrollbar but allow scrolling */
+    body { overflow-x: hidden; }
 
-    /* --- RESPONSIVENESS --- */
-    @media (max-width: 768px) {
-        .nav-menu { display: none; }
-        .footer-grid { text-align: center; }
-        .team-member { justify-content: center; }
+    /* Custom Mobile Menu Transition */
+    #mobile-menu {
+      transition: transform 0.3s ease-in-out;
     }
   </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col font-sans">
 
   <div class="bg-animation-layer"></div>
-  <div id="msg-box"></div>
+  
+  <div id="msg-box" class="fixed top-20 right-5 px-6 py-3 rounded-lg text-white font-bold hidden z-[2000] shadow-xl transition-all duration-500"></div>
 
-  <nav class="navbar">
-    <a href="index.html" class="nav-logo"><span>🔥</span> QuickGas</a>
-    <div class="nav-menu">
-      <a href="index.html">Home</a>
-      <a href="about.html">About Us</a>
-      <a href="services.html">Services</a>
-    </div>
+  <nav class="sticky top-0 z-[1000] bg-white/95 backdrop-blur-md shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <a href="index.html" class="nav-logo flex items-center gap-2 text-2xl font-bold text-slate-800">
+          <span>🔥</span> QuickGas
+        </a>
 
-    <div class="nav-auth-buttons">
-      <div id="auth-logged-out">
-        <a href="login.html" class="nav-link btn-login">Log In</a>
-        <a href="register.html" class="nav-link btn-register">Register</a>
-      </div>
+        <div class="hidden md:flex space-x-8">
+          <a href="index.html" class="text-slate-700 hover:text-orange-500 font-semibold transition">Home</a>
+          <a href="about.html" class="text-slate-700 hover:text-orange-500 font-semibold transition">About Us</a>
+          <a href="services.html" class="text-slate-700 hover:text-orange-500 font-semibold transition">Services</a>
+        </div>
 
-      <div id="auth-logged-in" class="profile-wrap">
-        <img id="profile-pic" src="" class="user-img" alt="User">
-        <div style="text-align: left;">
-            <div id="display-name" style="font-size: 0.8rem; font-weight: bold; color: #2c3e50;"></div>
-            <button id="logout-btn" class="btn-logout">Logout</button>
+        <div class="flex items-center gap-4">
+            <div id="auth-logged-out" class="hidden sm:flex items-center gap-3">
+                <a href="login.html" class="px-4 py-2 text-slate-700 border border-slate-700 rounded-md font-semibold hover:bg-slate-100 transition">Log In</a>
+                <a href="register.html" class="px-4 py-2 bg-orange-500 text-white rounded-md font-semibold hover:bg-orange-600 transition">Register</a>
+            </div>
+
+            <div id="auth-logged-in" class="hidden items-center gap-3 bg-slate-50 p-1 pr-4 rounded-full border border-slate-200">
+                <img id="profile-pic" src="" class="w-8 h-8 rounded-full border-2 border-orange-500" alt="User">
+                <div class="text-xs">
+                    <p id="display-name" class="font-bold text-slate-800 truncate max-w-[80px]"></p>
+                    <button id="logout-btn" class="text-red-500 font-bold hover:underline">Logout</button>
+                </div>
+            </div>
+
+            <button id="menu-toggle" class="md:hidden p-2 text-slate-700 focus:outline-none">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
         </div>
       </div>
     </div>
+
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-slate-100 p-4 space-y-4 shadow-lg">
+        <a href="index.html" class="block text-slate-700 font-semibold uppercase text-sm">Home</a>
+        <a href="about.html" class="block text-slate-700 font-semibold uppercase text-sm">About Us</a>
+        <a href="services.html" class="block text-slate-700 font-semibold uppercase text-sm">Services</a>
+        <hr>
+        <div id="mobile-auth-out" class="flex flex-col gap-2">
+            <a href="login.html" class="w-full text-center py-2 border border-slate-700 rounded text-slate-700">Log In</a>
+            <a href="register.html" class="w-full text-center py-2 bg-orange-500 text-white rounded">Register</a>
+        </div>
+    </div>
   </nav>
 
-  <main class="content-wrapper">
-    <section class="hero-card">
-      <div class="mascot-container-inner">
-          <span class="sparkle" style="top:0; right:0;">✨</span>
-          <span class="sparkle" style="bottom:5px; left:0; animation-delay: 0.5s;">✨</span>
-          <video class="human-mascot" autoplay muted loop playsinline>
+  <main class="flex-grow flex items-center justify-center p-6">
+    <section class="bg-white/95 backdrop-blur-lg p-8 md:p-12 rounded-[2.5rem] shadow-2xl w-full max-w-md text-center border border-white/40">
+      
+      <div class="mascot-float relative w-32 md:w-40 mx-auto mb-6">
+          <span class="absolute top-0 -right-2 text-2xl animate-pulse">✨</span>
+          <span class="absolute bottom-2 -left-2 text-2xl animate-pulse delay-500">✨</span>
+          <video class="rounded-2xl shadow-lg w-full" autoplay muted loop playsinline>
               <source src="https://www.shutterstock.com/shutterstock/videos/3708533679/preview/stock-footage-delivery-man-riding-scooter-animation-story-size-for-social-media-vertical-orientation-template.webm" type="video/webm">
           </video>
       </div>
 
-      <h1 style="color: #2c3e50; font-size: 2.2rem; margin-bottom: 0.5rem;">QuickGas</h1>
-      <p style="color: #34495e; font-size: 1.1rem; margin-bottom: 2rem;">Fast & reliable gas delivery.<br><strong>Pay on delivery.</strong></p>
-      <a href="products.html" style="display: inline-block; background: linear-gradient(135deg, #e67e22, #d35400); color: white; padding: 16px 40px; text-decoration: none; font-weight: bold; border-radius: 50px; transition: 0.4s; box-shadow: 0 10px 25px rgba(230, 126, 34, 0.4);">Order Gas Now</a>
+      <h1 class="text-4xl md:text-5xl font-bold text-slate-800 mb-2">QuickGas</h1>
+      <p class="text-slate-600 text-lg mb-8 italic">Fast & reliable gas delivery.<br><span class="font-bold text-orange-600 underline">Pay on delivery.</span></p>
+      
+      <a href="products.html" class="inline-block w-full sm:w-auto bg-gradient-to-r from-orange-500 to-orange-700 text-white px-10 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-orange-300 transform transition hover:-translate-y-1 active:scale-95">
+        Order Gas Now
+      </a>
     </section>
   </main>
 
-  <footer>
-    <div class="footer-grid">
-      <div class="footer-column">
-        <h3 style="color: white;">QuickGas</h3>
-        <p style="color: #bdc3c7; font-size: 0.85rem;">Delivering safe, efficient cooking energy to your doorstep across Nairobi.</p>
+  <footer class="bg-slate-950 text-slate-200 pt-16 pb-8 px-6 border-t-4 border-orange-500">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10">
+      
+      <div class="space-y-4">
+        <h3 class="text-white text-xl font-bold">QuickGas</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">Delivering safe, efficient cooking energy to your doorstep across Nairobi.</p>
       </div>
-      <div class="footer-column">
-        <h3>Legal</h3>
-        <ul>
-          <li><a href="terms.html">Terms & Conditions</a></li>
-          <li><a href="privacy.html">Privacy Policy</a></li>
-          <li><a href="refund.html">Refund Policy</a></li>
+
+      <div class="space-y-4">
+        <h3 class="text-orange-500 uppercase tracking-widest text-sm font-bold">Legal</h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="terms.html" class="hover:text-orange-500 transition">Terms & Conditions</a></li>
+          <li><a href="privacy.html" class="hover:text-orange-500 transition">Privacy Policy</a></li>
+          <li><a href="refund.html" class="hover:text-orange-500 transition">Refund Policy</a></li>
         </ul>
       </div>
-      <div class="footer-column">
-        <h3>Safety</h3>
-        <ul>
-          <li><a href="safety.html">Gas Safety Tips</a></li>
-          <li><a href="cylinder.html">Cylinder Handling</a></li>
-          <li><a href="emergency.html">Emergency Contacts</a></li>
+
+      <div class="space-y-4">
+        <h3 class="text-orange-500 uppercase tracking-widest text-sm font-bold">Safety</h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="safety.html" class="hover:text-orange-500 transition">Gas Safety Tips</a></li>
+          <li><a href="cylinder.html" class="hover:text-orange-500 transition">Cylinder Handling</a></li>
+          <li><a href="emergency.html" class="hover:text-orange-500 transition">Emergency Contacts</a></li>
         </ul>
       </div>
-      <div class="footer-column">
-        <h3>Leadership</h3>
-        <div class="team-member">
-          <img src="douglas.jpg" alt="" class="team-avatar">
-          <div class="team-info">
-            <h4 style="margin:0; font-size: 0.9rem;">Douglas Nyamiaka</h4>
-            <p style="margin:0; font-size: 0.8rem; color: #bdc3c7;">CEO & Founder</p>
+
+      <div class="space-y-4">
+        <h3 class="text-orange-500 uppercase tracking-widest text-sm font-bold">Leadership</h3>
+        <div class="flex items-center gap-3">
+          <img src="douglas.jpg" class="w-10 h-10 rounded-full border-2 border-orange-500 object-cover" alt="">
+          <div>
+            <p class="text-sm font-bold">Douglas Nyamiaka</p>
+            <p class="text-xs text-slate-400">CEO & Founder</p>
           </div>
         </div>
-        <div class="team-member">
-          <img src="dedalius.jpg" alt="" class="team-avatar">
-          <div class="team-info">
-            <h4 style="margin:0; font-size: 0.9rem;">Dedalius Ogamba</h4>
-            <p style="margin:0; font-size: 0.8rem; color: #bdc3c7;">Web Moderator</p>
+        <div class="flex items-center gap-3">
+          <img src="dedalius.jpg" class="w-10 h-10 rounded-full border-2 border-orange-500 object-cover" alt="">
+          <div>
+            <p class="text-sm font-bold">Dedalius Ogamba</p>
+            <p class="text-xs text-slate-400">Web Moderator</p>
           </div>
         </div>
       </div>
-      <div class="footer-column">
-        <h3>Contact</h3>
-        <ul style="color: #bdc3c7; font-size: 0.85rem;">
-          <li>📞 +254 701087111 / 0713649339</li>
+
+      <div class="space-y-4">
+        <h3 class="text-orange-500 uppercase tracking-widest text-sm font-bold">Contact</h3>
+        <ul class="text-sm space-y-2 text-slate-400">
+          <li>📞 +254 701087111</li>
           <li>✉️ support@quickgas.com</li>
           <li>📍 Nairobi, Kenya</li>
         </ul>
       </div>
     </div>
-    <div class="footer-bottom">&copy; 2026 QuickGas Delivery. All rights reserved.</div>
+    
+    <div class="mt-12 pt-8 border-t border-slate-800 text-center text-slate-500 text-sm">
+      &copy; 2026 QuickGas Delivery. All rights reserved.
+    </div>
   </footer>
 
   <script type="module">
@@ -243,21 +185,33 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
+    // Mobile Menu Toggle
+    const menuBtn = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    menuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+
     const msgBox = document.getElementById('msg-box');
     function showMsg(text, bgColor) {
         msgBox.innerText = text;
         msgBox.style.backgroundColor = bgColor;
-        msgBox.style.display = 'block';
-        setTimeout(() => { msgBox.style.display = 'none'; }, 3500);
+        msgBox.classList.remove('hidden');
+        setTimeout(() => { msgBox.classList.add('hidden'); }, 3500);
     }
 
     onAuthStateChanged(auth, (user) => {
       const loggedOutUI = document.getElementById('auth-logged-out');
       const loggedInUI = document.getElementById('auth-logged-in');
+      const mobileAuthOut = document.getElementById('mobile-auth-out');
+
       if (user) {
-        loggedOutUI.style.display = 'none';
-        loggedInUI.style.display = 'flex';
-        document.getElementById('display-name').innerText = user.displayName || user.email;
+        loggedOutUI.classList.add('hidden');
+        mobileAuthOut.classList.add('hidden');
+        loggedInUI.classList.remove('hidden');
+        loggedInUI.classList.add('flex');
+        
+        document.getElementById('display-name').innerText = user.displayName || user.email.split('@')[0];
         document.getElementById('profile-pic').src = user.photoURL || 'https://via.placeholder.com/32';
         
         if(sessionStorage.getItem('showLoginMsg') === 'true') {
@@ -265,8 +219,9 @@
             sessionStorage.removeItem('showLoginMsg');
         }
       } else {
-        loggedOutUI.style.display = 'flex';
-        loggedInUI.style.display = 'none';
+        loggedOutUI.classList.remove('hidden');
+        mobileAuthOut.classList.remove('hidden');
+        loggedInUI.classList.add('hidden');
         
         if(sessionStorage.getItem('showLogoutMsg') === 'true') {
             showMsg("Logged out successfully!", "#e67e22");
