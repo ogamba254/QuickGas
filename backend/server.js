@@ -10,7 +10,7 @@ const port = process.env.PORT || 3000;
 const payments = {}; 
 
 app.use(cors({
-    origin: ['https://quick-gas-gamma.vercel.app', 'http://127.0.0.1:5500'], 
+    origin: ['https://quickgass.vercel.app', 'http://127.0.0.1:5500'], 
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type']
 }));
